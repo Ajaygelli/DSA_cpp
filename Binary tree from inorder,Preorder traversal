@@ -1,0 +1,45 @@
+/**
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ * };
+ */ 
+ 
+ // we are creating a binary tree from a inorder and traversing through a pre order vector ans using hashing ans ps,pe,is,ie values as preorder start,end values,
+ //inorder start,end values
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) 
+    {
+        int prestart=0;
+        int preend=preorder.size()-1;
+        int instart=0;
+        int inend=inorder.size()-1;
+        map<int,int>mp;
+        //lets make the inorder vector into a map
+        for(int i=0;i<inorder.size();i++)
+        {
+            mp[inorder[i]]=i;
+        }
+
+       TreeNode*root= fun(preorder,prestart,preend,inorder,instart,inend,mp);
+        return root;
+        
+    }
+
+
+    TreeNode* fun(vector<int>& preorder,int prestart,int preend, vector<int>& inorder,int instart,int inend,map<int,int>&mp) 
+     {
+         if(prestart>preend||instart>inend){return NULL;}
+         //create a root with the given preorder itereator
+        TreeNode* root= new TreeNode(preorder[prestart]);
+        int elem=mp[root->val];//it is the index of the root in preorder vector through map
+        int n_elem=elem-instart;
+        //lets assaign a new root as its leftsubtree and right subtree
+        root->left=fun(preorder,prestart+1,prestart+n_elem,inorder,instart,elem-1,mp);
+        root->right=fun(preorder,prestart+1+n_elem,preend,inorder,elem+1,inend,mp);
+        return root;
+     }
+
+};
