@@ -1,0 +1,57 @@
+class Solution {
+public:
+
+    void function(int col,vector<vector<string>>&ans,vector<string>&check,int n,vector<int> &leftrow,vector<int>&upperdiagonal,vector<int>&lowerdiagonal)
+    {
+            if(col==n)
+            {
+            ans.push_back(check);
+            return;}
+                 
+            for(int row=0;row<n;row++)
+            {
+                if(leftrow[row]==0&&upperdiagonal[n-1+col-row]==0&&lowerdiagonal[row+col]==0)
+                {
+                    //now it is safe place to keep a new queen here
+                    check[row][col]='Q';
+                    leftrow[row]=1;
+                    upperdiagonal[n-1+col-row]=1;
+                    lowerdiagonal[row+col]=1;
+                    //we kept queen and make check vector position arked by keeping 1 there
+                    function( col+1,ans,check, n, leftrow,upperdiagonal,lowerdiagonal);
+                    //Now we can send it to the next coloumn
+                    check[row][col]='.';
+                    leftrow[row]=0;
+                    upperdiagonal[n-1+col-row]=0;
+                    lowerdiagonal[row+col]=0;
+                }
+            }
+        
+
+    }
+
+    vector<vector<string>> solveNQueens(int n) 
+    {
+        //lets create a matrix of '.' check by vector of vector 
+        vector<string> check(n);
+        //take a string of size n with '.'
+        string s(n,'.');
+        //lets upload it for n tims each row 
+        for(int i=0;i<n;i++)
+        {
+            check[i]=s;
+        }
+        //Now i created a matrix vector of vector of strings with '.'
+        vector<vector<string>> ans;
+        //for checking q can safe or not woth this vectors
+        vector<int> leftrow(n,0);
+        vector<int>upperdiagonal(2*n-1,0);
+        vector<int>lowerdiagonal(2*n-1,0);
+
+        int col=0;
+        //we are doing col wose operations
+        function( col,ans,check, n, leftrow,upperdiagonal,lowerdiagonal);
+
+        return ans;
+    }
+};
